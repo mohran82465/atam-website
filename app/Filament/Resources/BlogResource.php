@@ -41,22 +41,9 @@ class BlogResource extends Resource
                     }),
                     Select::make('categories')
                     ->multiple()
-                    ->relationship(
-                        name: 'categories',
-                        titleAttribute: 'name'
-                    )
-                    ->getSearchResultsUsing(function (string $search) {
-                        $locale = app()->getLocale();
-                        return \App\Models\CategoryTranslation::where('locale', $locale)
-                            ->where('name', 'like', "%{$search}%")
-                            ->pluck('name', 'category_id');
-                    })
-                    ->getOptionLabelUsing(function ($value) {
-                        $locale = app()->getLocale();
-                        return \App\Models\CategoryTranslation::where('category_id', $value)
-                            ->where('locale', $locale)
-                            ->value('name');
-                    })
+                    ->relationship('categories', 'slug')
+                    ->preload()
+                    ->searchable()
                     ->label('Categories'),
                 
 
