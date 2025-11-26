@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChunkController;
 use App\Http\Controllers\Api\ProjectController;
@@ -32,3 +33,5 @@ Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{slug}', [ProjectController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{slug}', [CategoryController::class, 'show']);
+Route::get('/blogs', [BlogController::class, 'index']);
+Route::get('/blogs/{slug}', [BlogController::class, 'show']);

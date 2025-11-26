@@ -41,7 +41,7 @@ class BlogResource extends Resource
                     }),
                     Select::make('categories')
                     ->multiple()
-                    ->relationship('categories', 'slug')
+                    ->relationship('categories', 'name')
                     ->preload()
                     ->searchable()
                     ->label('Categories'),

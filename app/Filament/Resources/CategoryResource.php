@@ -30,6 +30,9 @@ class CategoryResource extends Resource
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
+                TextInput::make('name')
+                    ->required()
+                    ->unique(ignoreRecord: true),
                 Repeater::make('translations')
                     ->relationship()
                     ->schema([
@@ -69,13 +72,8 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('slug'),
-                TextColumn::make('translations.name')
-                    ->label('Name')
-                    ->formatStateUsing(function ($state, $record) {
-                        $en = $record->translations->firstWhere('locale', 'en');
-                        $ar = $record->translations->firstWhere('locale', 'ar');
-                        return $en->name ?? $ar->name ?? 'N/A';
-                    }),
+                TextColumn::make('name'),
+                
 
 
 
