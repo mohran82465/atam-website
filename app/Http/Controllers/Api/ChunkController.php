@@ -25,7 +25,7 @@ class ChunkController extends Controller
                 ];
             });
 
-
+            
             return [
                 'id' => $chunk->id,
                 'page' => $chunk->page,
@@ -59,10 +59,10 @@ class ChunkController extends Controller
             'id' => $chunk->id,
             'page' => $chunk->page,
             'slug' => $chunk->slug,
-            'thumbnail' => $chunk->thumbnail ? asset('storage/' . $chunk->thumbnail) : null,
+            'thumbnail' => $chunk->thumbnail ? $chunk->thumbnail  : null,
             'translations' => $translations,
       
-        ]);
+        ]); 
     }
 
 

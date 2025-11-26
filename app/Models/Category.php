@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+    use HasFactory;
+    protected $fillable = ['slug'];
+
+    public function translations()
+    {
+        return $this->hasMany(CategoryTranslation::class);
+    }
+
+    public function translation($locale)
+    {
+        return $this->translations()->where('locale', $locale)->first();
+    }
+    public function blogs(){
+        return $this->belongsToMany(Category::class, 'blog_category');
+    }
+}

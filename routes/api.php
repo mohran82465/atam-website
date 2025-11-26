@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChunkController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TeamMemberController;
@@ -29,3 +30,5 @@ Route::get('/chunks/{slug}', [ChunkController::class, 'showBySlug']);
 Route::get('/team', [TeamMemberController::class, 'index']);
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{slug}', [ProjectController::class, 'show']);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{slug}', [CategoryController::class, 'show']);
