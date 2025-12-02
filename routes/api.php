@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChunkController;
+use App\Http\Controllers\Api\OurServiceController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TeamMemberController;
 use Illuminate\Http\Request;
@@ -35,3 +36,6 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 Route::get('/blogs', [BlogController::class, 'index']);
 Route::get('/blogs/{slug}', [BlogController::class, 'show']);
+Route::get('/ourservices', [OurServiceController::class, 'index']);
+Route::get('/ourservices/{slug}', [OurServiceController::class, 'show']);
+

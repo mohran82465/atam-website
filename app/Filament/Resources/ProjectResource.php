@@ -33,7 +33,9 @@ class ProjectResource extends Resource
             ->schema([
                 TextInput::make('slug')
                     ->required()
-                    ->unique(ignoreRecord: true),
+                    ->unique(ignoreRecord: true)
+                    ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
+                    ->rule('lowercase'),
 
                 FileUpload::make('image')
                     ->directory('projects')

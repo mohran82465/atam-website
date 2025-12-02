@@ -36,7 +36,9 @@ class ChunkResource extends Resource
                     TextInput::make('page')
                         ->maxLength(191),
                     TextInput::make('slug')
-                        ->maxLength(191),
+                        ->maxLength(191)
+                        ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
+                    ->rule('lowercase'),
                 ]),
 
                 FileUpload::make('thumbnail')

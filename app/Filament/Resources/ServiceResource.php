@@ -2,14 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BlogResource\Pages;
-use App\Filament\Resources\BlogResource\RelationManagers;
-use App\Models\Blog;
+use App\Filament\Resources\ServiceResource\Pages;
+use App\Filament\Resources\ServiceResource\RelationManagers;
+use App\Models\Service;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,9 +19,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BlogResource extends Resource
+class ServiceResource extends Resource
 {
-    protected static ?string $model = Blog::class;
+    protected static ?string $model = Service::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -29,28 +29,26 @@ class BlogResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('name')
+                    ->required(),
                 TextInput::make('slug')
-                    ->required()
-                    ->unique(ignoreRecord: true)
+                ->unique(ignoreRecord: true)
+                ->required()
                     ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
-                    ->rule('lowercase'),
-
-                FileUpload::make('image')
-                    ->directory('projects')
+                    ->rule('lowercase')
+                    ,
+                TextInput::make('icon')
+                    ->required(),
+                FileUpload::make('thumbnail')
                     ->image()
+                    ->disk('public')
+                    ->directory('image')
                     ->nullable()
                     ->saveUploadedFileUsing(function ($file) {
                         $path = $file->store('image', 'public');
+
                         return 'storage/' . $path;
                     }),
-                    Select::make('categories')
-                    ->multiple()
-                    ->relationship('categories', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->label('Categories'),
-                
-
                 Repeater::make('translations')
                     ->relationship()
                     ->schema([
@@ -60,26 +58,37 @@ class BlogResource extends Resource
                                 'ar' => 'Arabic'
                             ])
                             ->required(),
-                        TextInput::make('name')->required(),
-                        RichEditor::make('body')->required(),
+                        TextInput::make('title')
+                            ->required(),
+                        TextInput::make('short_description')
+                            ->required(),
+                        TextInput::make('long_description')
+                            ->required(),
+                        TagsInput::make('features')
+                            ->required(),
                     ])
                     ->default([
                         [
                             'locale' => 'en',
-                            'name' => '',
-                            'body' => '',
+                            'title' => '',
+                            'short_description' => '',
+                            'long_description' => '',
+                            'features' => [],
                         ],
                         [
                             'locale' => 'ar',
-                            'name' => '',
-                            'body' => '',
-                        ]
+                            'title' => '',
+                            'short_description' => '',
+                            'long_description' => '',
+                            'features' => [],
+                        ],
                     ])
                     ->itemLabel(function ($state) {
-                        return ($state['locale'] == "ar" ? 'Arabic' : 'English') . ' Blog';
+                        return ($state['locale'] == "ar" ? 'Arabic' : 'English') . ' Our Service Name';
                     })
                     ->collapsible()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+
             ]);
     }
 
@@ -87,22 +96,9 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
-                TextColumn::make('slug')->searchable(),
-                TextColumn::make('translations.name')
-                    ->label('name')
-                    ->formatStateUsing(function ($state, $record) {
-                        $en = $record->translations->firstWhere('locale', 'en');
-                        $ar = $record->translations->firstWhere('locale', 'ar');
-                        return $en->name ?? $ar->name ?? 'N/A';
-                    })->searchable(),
-                TextColumn::make('translations.body')
-                    ->label('body')
-                    ->formatStateUsing(function ($state, $record) {
-                        $en = $record->translations->firstWhere('locale', 'en');
-                        $ar = $record->translations->firstWhere('locale', 'ar');
-                        return $en->name ?? $ar->name ?? 'N/A';
-                    })->searchable(),
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('slug')->searchable()->sortable(),
+                TextColumn::make('icon')->searchable()->sortable(),
             ])
             ->filters([
                 //
@@ -120,17 +116,16 @@ class BlogResource extends Resource
     public static function getRelations(): array
     {
         return [
-
-
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBlogs::route('/'),
-            'create' => Pages\CreateBlog::route('/create'),
-            'edit' => Pages\EditBlog::route('/{record}/edit'),
+            'index' => Pages\ListServices::route('/'),
+            'create' => Pages\CreateService::route('/create'),
+            'edit' => Pages\EditService::route('/{record}/edit'),
         ];
     }
 }

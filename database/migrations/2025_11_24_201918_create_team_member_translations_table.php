@@ -8,17 +8,6 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('team_member_translations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('team_member_id')->constrained()->cascadeOnDelete();
-            $table->string('locale'); 
-            $table->string('name');
-            $table->string('title')->nullable();
-            $table->timestamps();
-        });
-    }
 
     /**
      * Reverse the migrations.
