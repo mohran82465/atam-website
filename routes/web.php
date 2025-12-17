@@ -16,7 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $name = "Code with mohran"; 
- 
+    $name = "Code with mohran";
+
     return redirect('/admin');
+});
+Route::get('c-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
+    return 'cleared';
 });
