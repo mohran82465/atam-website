@@ -73,7 +73,7 @@ class ProjectResource extends Resource
                             'body' => '',
                             'problem' => '',
                             'solve' => '',
-                            'tech' => '',
+                            'tech' => [],
                         ],
                         [
                             'locale' => 'ar',
@@ -81,7 +81,7 @@ class ProjectResource extends Resource
                             'body' => '',
                             'problem' => '',
                             'solve' => '',
-                            'tech' => '',
+                            'tech' => [],
                         ]
                     ])
                     ->itemLabel(function ($state) {

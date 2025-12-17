@@ -39,7 +39,7 @@ class ChunkResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->required()
                         ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
-                    ->rule('lowercase'),s
+                    ->rule('lowercase'),
                 ]),
 
                 FileUpload::make('thumbnail')
