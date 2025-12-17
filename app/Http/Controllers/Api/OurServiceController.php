@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Service\ServiceListResource;
+use App\Http\Resources\Service\ServiceShowResource;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -35,17 +37,18 @@ class OurServiceController extends Controller
     
     public function index(){
         $services = Service::with('translations')->get(); 
-        $data = $services->map(function($service){
-            return [
-                'id'=> $service->id,
-                'name'=> $service->name,
-                'slug'=> $service->slug,
-                'icon'=> $service->icon,
-                'translations'=> $this->formatTranslationsForAllServices($service->translations),
-            ];
-        });
+        // $data = $services->map(function($service){
+        //     return [
+        //         'id'=> $service->id,
+        //         'name'=> $service->name,
+        //         'slug'=> $service->slug,
+        //         'icon'=> $service->icon,
+        //         'translations'=> $this->formatTranslationsForAllServices($service->translations),
+        //     ];
+        // });
 
-        return response()->json($data, 200);
+        // return response()->json($data, 200);
+        return ServiceListResource::collection($services); 
     }
     public function show($slug)
     {
@@ -53,13 +56,14 @@ class OurServiceController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
     
-        return response()->json([
-            'id' => $service->id,
-            'name' => $service->name,
-            'slug' => $service->slug,
-            'icon' => $service->icon,
-            'translations' => $this->formatTranslationsForService($service->translations),
-        ], 200);
+        // return response()->json([
+        //     'id' => $service->id,
+        //     'name' => $service->name,
+        //     'slug' => $service->slug,
+        //     'icon' => $service->icon,
+        //     'translations' => $this->formatTranslationsForService($service->translations),
+        // ], 200);
+        return new ServiceShowResource($service); 
     }
     
 }

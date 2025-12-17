@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -23,15 +24,16 @@ class CategoryController extends Controller
     {
         $categories = Category::with('translations')->get();
 
-        $data = $categories->map(function ($category) {
-            return [
-                'id' => $category->id,
-                'slug' => $category->slug,
-                'translations' => $this->formatTranslations($category->translations),
-            ];
-        });
+        // $data = $categories->map(function ($category) {
+        //     return [
+        //         'id' => $category->id,
+        //         'slug' => $category->slug,
+        //         'translations' => $this->formatTranslations($category->translations),
+        //     ];
+        // });
 
-        return response()->json($data, 200);
+        // return response()->json($data, 200);
+        return CategoryResource::collection($categories); 
     }
 
     public function show($slug)
@@ -40,11 +42,12 @@ class CategoryController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return response()->json([
-            'id' => $category->id,
-            'slug' => $category->slug,
-            'translations' => $this->formatTranslations($category->translations),
-        ], 200);
+        // return response()->json([
+        //     'id' => $category->id,
+        //     'slug' => $category->slug,
+        //     'translations' => $this->formatTranslations($category->translations),
+        // ], 200);
+        return new CategoryResource($category); 
     }
 
 

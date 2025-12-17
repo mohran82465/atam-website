@@ -11,6 +11,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -60,9 +61,9 @@ class ProjectResource extends Resource
                         ,
 
                         TextInput::make('name')->required(),
-                        RichEditor::make('body')->nullable(),
-                        RichEditor::make('problem')->nullable(),
-                        RichEditor::make('solve')->nullable(),
+                        Textarea::make('body')->nullable(),
+                        Textarea::make('problem')->nullable(),
+                        Textarea::make('solve')->nullable(),
                         TagsInput::make('tech')->nullable(),
                     ])
                     ->default([

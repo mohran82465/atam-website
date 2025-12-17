@@ -36,9 +36,10 @@ class ChunkResource extends Resource
                     TextInput::make('page')
                         ->maxLength(191),
                     TextInput::make('slug')
-                        ->maxLength(191)
+                    ->unique(ignoreRecord: true)
+                    ->required()
                         ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
-                    ->rule('lowercase'),
+                    ->rule('lowercase'),s
                 ]),
 
                 FileUpload::make('thumbnail')
@@ -66,21 +67,8 @@ class ChunkResource extends Resource
                         TextInput::make('title')
                             ->required()
                             ->maxLength(191),
-                        RichEditor::make('body')
-                            ->toolbarButtons([
-                                'blockquote',
-                                'bold',
-                                'bulletList',
-                                'h2',
-                                'h3',
-                                'italic',
-                                'link',
-                                'orderedList',
-                                'redo',
-                                'strike',
-                                'underline',
-                                'undo',
-                            ]),
+                        Textarea::make('body')
+                            
                     ])
                     ->default([
                         [

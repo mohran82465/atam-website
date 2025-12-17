@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Blog\BlogResource;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,8 @@ class BlogController extends Controller
     public function index()
     {
         $blogs = Blog::with(['translations', 'categories.translations'])->get();
-        return response()->json($blogs->map(fn($b) => $this->formatBlog($b)), 200);
+        // return response()->json($blogs->map(fn($b) => $this->formatBlog($b)), 200);
+        return BlogResource::collection($blogs); 
     }
 
     public function show($slug)
@@ -20,7 +22,8 @@ class BlogController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return response()->json($this->formatBlog($blog), 200);
+        // return response()->json($this->formatBlog($blog), 200);
+        return new BlogResource($blog   ); 
     }
 
     private function formatBlog($blog)
