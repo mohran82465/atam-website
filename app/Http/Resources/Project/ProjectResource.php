@@ -17,7 +17,7 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'slug' => $this->slug,
-            'image' => $this->image ? asset('storage/'.$this->image) : null,
+            'image' => $this->image ? env('APP_URL') . '/'. $this->image : null,
             'translations' => $this->translations->mapWithKeys(fn ($t) => [
                 $t->locale => [
                     'name' => $t->name,

@@ -36,7 +36,7 @@ class ProjectController extends Controller
         // });
 
         // return response()->json($projects, 200);
-        $projects = Project::with('translations')->get();
+        $projects = Project::with('translations')->paginate();
         return ProjectResource::collection($projects); 
     }
 

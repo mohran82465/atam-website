@@ -18,7 +18,7 @@ class ServiceShowResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
-            'image' => $this->image,
+            'image' => $this->image ? env('APP_URL') . '/'. $this->image : null,
             'icon' => $this->icon,
             'translations' => $this->translations->mapWithKeys(fn ($t) => [
                 $t->locale => [

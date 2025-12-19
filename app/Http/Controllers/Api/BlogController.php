@@ -11,7 +11,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with(['translations', 'categories.translations'])->get();
+        $blogs = Blog::with(['translations', 'categories.translations'])->paginate();
         // return response()->json($blogs->map(fn($b) => $this->formatBlog($b)), 200);
         return BlogResource::collection($blogs); 
     }

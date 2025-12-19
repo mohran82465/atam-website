@@ -19,6 +19,7 @@ class ServiceListResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'icon' => $this->icon,
+            'image' => $this->image ? env('APP_URL') . '/'. $this->image : null,
             'translations' => $this->translations->mapWithKeys(fn ($t) => [
                 $t->locale => [
                     'title' => $t->title,
