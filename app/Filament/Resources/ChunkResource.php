@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\File;
 
 class ChunkResource extends Resource
 {
@@ -36,10 +37,10 @@ class ChunkResource extends Resource
                     TextInput::make('page')
                         ->maxLength(191),
                     TextInput::make('slug')
-                    ->unique(ignoreRecord: true)
-                    ->required()
+                        ->unique(ignoreRecord: true)
+                        ->required()
                         ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
-                    ->rule('lowercase'),
+                        ->rule('lowercase'),
                 ]),
 
                 FileUpload::make('thumbnail')
@@ -48,9 +49,18 @@ class ChunkResource extends Resource
                     ->directory('image')
                     ->nullable()
                     ->saveUploadedFileUsing(function ($file) {
-                        $path = $file->store('image', 'public');
+                        $path = public_path('image');
 
-                        return 'storage/' . $path;
+                        if (!File::exists($path)) {
+                            File::makeDirectory($path, 0755, true);
+                        }
+
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $target = $path . DIRECTORY_SEPARATOR . $filename;
+
+                        File::copy($file->getRealPath(), $target);
+
+                        return 'image/' . $filename;
                     })
                 ,
 
@@ -68,7 +78,7 @@ class ChunkResource extends Resource
                             ->required()
                             ->maxLength(191),
                         Textarea::make('body')
-                            
+
                     ])
                     ->default([
                         [

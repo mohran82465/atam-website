@@ -18,6 +18,7 @@ class ServiceShowResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'image' => $this->image,
             'icon' => $this->icon,
             'translations' => $this->translations->mapWithKeys(fn ($t) => [
                 $t->locale => [

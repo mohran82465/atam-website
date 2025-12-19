@@ -19,6 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\File;
 
 class TeamMemberResource extends Resource
 {
@@ -34,9 +35,18 @@ class TeamMemberResource extends Resource
                     ->directory('image')
                     ->image()
                     ->saveUploadedFileUsing(function ($file) {
-                        $path = $file->store('image', 'public');
+                        $path = public_path('image');
 
-                        return 'storage/' . $path;
+                        if (! File::exists($path)) {
+                            File::makeDirectory($path, 0755, true);
+                        }
+                
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $target = $path . DIRECTORY_SEPARATOR . $filename;
+                
+                        File::copy($file->getRealPath(), $target);
+                
+                        return 'image/' . $filename;
                     })
                     ->required(),
 
@@ -102,7 +112,13 @@ class TeamMemberResource extends Resource
                     })
                     ->sortable()
                     ->searchable(),
-                ImageColumn::make('image')->square()
+                ImageColumn::make(name: 'image')
+                    ->square()
+                    ->state(fn ($record) =>
+                    $record->image
+                        ? asset($record->image)
+                        : null
+                )
 
 
 

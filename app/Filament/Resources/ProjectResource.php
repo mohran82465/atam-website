@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\File;
 
 class ProjectResource extends Resource
 {
@@ -39,14 +40,25 @@ class ProjectResource extends Resource
                     ->rule('lowercase'),
 
                 FileUpload::make('image')
-                    ->directory('projects')
+                    ->directory('image')
                     ->image()
                     ->nullable()
                     ->saveUploadedFileUsing(function ($file) {
-                        $path = $file->store('image', 'public');
-                        return 'storage/' . $path;
+                        $path = public_path('image');
+
+                        if (!File::exists($path)) {
+
+                            File::makeDirectory($path, 0755, true);
+                        }
+
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $target = $path . DIRECTORY_SEPARATOR . $filename;
+
+                        File::copy($file->getRealPath(), $target);
+
+                        return 'image/' . $filename;
                     })
-                    ,
+                ,
 
                 Repeater::make('translations')
                     ->relationship()
@@ -98,7 +110,14 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('slug')->searchable(),
-                ImageColumn::make('image'),
+                ImageColumn::make(name: 'image')
+                    ->square()
+                    ->state(
+                        fn($record) =>
+                        $record->image
+                        ? asset($record->image)
+                        : null
+                    ),
                 TextColumn::make('translations.name')
                     ->label('Name')
                     ->formatStateUsing(function ($state, $record) {

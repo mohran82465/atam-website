@@ -15,10 +15,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\File;
 
 class BlogResource extends Resource
 {
@@ -41,16 +43,26 @@ class BlogResource extends Resource
                     ->image()
                     ->nullable()
                     ->saveUploadedFileUsing(function ($file) {
-                        $path = $file->store('image', 'public');
-                        return 'storage/' . $path;
+                        $path = public_path('image');
+
+                        if (!File::exists($path)) {
+                            File::makeDirectory($path, 0755, true);
+                        }
+
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $target = $path . DIRECTORY_SEPARATOR . $filename;
+
+                        File::copy($file->getRealPath(), $target);
+
+                        return 'image/' . $filename;
                     }),
-                    Select::make('categories')
+                Select::make('categories')
                     ->multiple()
                     ->relationship('categories', 'name')
                     ->preload()
                     ->searchable()
                     ->label('Categories'),
-                
+
 
                 Repeater::make('translations')
                     ->relationship()
@@ -104,6 +116,14 @@ class BlogResource extends Resource
                         $ar = $record->translations->firstWhere('locale', 'ar');
                         return $en->name ?? $ar->name ?? 'N/A';
                     })->searchable(),
+                ImageColumn::make(name: 'image')
+                    ->square()
+                    ->state(
+                        fn($record) =>
+                        $record->image
+                        ? asset($record->image)
+                        : null
+                    )
             ])
             ->filters([
                 //
