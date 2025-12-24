@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use function Laravel\Prompts\table;
 
 return new class extends Migration
 {
@@ -11,13 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_translations', function (Blueprint $table) {
-            $table->id();
-            // $table->foreignId('blog_category_id')->constrained()->cascadeOnDelete();
-
-            // $table->string('locale');
-            // $table->string('name');
-            $table->timestamps();
+        Schema::table('projects', function (Blueprint $table) {
+            $table->string('url')->nullable();
+            $table->boolean('status')->default(false); 
         });
     }
 
@@ -26,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_translations');
+        Schema::table('projects', function (Blueprint $table) {
+            //
+        });
     }
 };

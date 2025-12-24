@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChunkController;
+use App\Http\Controllers\Api\CreativeDepartments;
 use App\Http\Controllers\Api\OurServiceController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TeamMemberController;
@@ -32,10 +33,13 @@ Route::get('/chunks/{slug}', [ChunkController::class, 'showBySlug']);
 Route::get('/team', [TeamMemberController::class, 'index']);
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{slug}', [ProjectController::class, 'show']);
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{slug}', [CategoryController::class, 'show']);
+// Route::get('/categories', [CategoryController::class, 'index']);
+// Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 Route::get('/blogs', [BlogController::class, 'index']);
 Route::get('/blogs/{slug}', [BlogController::class, 'show']);
 Route::get('/ourservices', [OurServiceController::class, 'index']);
 Route::get('/ourservices/{slug}', [OurServiceController::class, 'show']);
+Route::get('/creative-department', [CreativeDepartments::class, 'index']);
+Route::get('/blog-category',[CategoryController::class,'indexBlog']); 
+Route::get('/project-category',[CategoryController::class,'indexProject']); 
 

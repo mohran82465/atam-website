@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -38,7 +39,12 @@ class ProjectResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
                     ->rule('lowercase'),
-
+                Select::make('categories')
+                    ->multiple()
+                    ->relationship('categories', 'name')
+                    ->preload()
+                    ->searchable()
+                    ->label('Categories'),
                 FileUpload::make('image')
                     ->directory('image')
                     ->image()
@@ -110,6 +116,11 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('slug')->searchable(),
+                ToggleColumn::make('status')
+                    ->label('Published')
+                    ->onColor('success')
+                    ->offColor('danger'),
+
                 ImageColumn::make(name: 'image')
                     ->square()
                     ->state(

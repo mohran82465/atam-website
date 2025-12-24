@@ -20,7 +20,6 @@ class ChunkResource extends JsonResource
             'slug' => $this->slug,
             // 'thumbnail' => $this->thumbnail ?: null,
             'thumbnail' => $this->thumbnail ? env('APP_URL') . '/'. $this->thumbnail : null,
-
             'translations' => $this->translations->mapWithKeys(fn($t) => [
                 $t->locale => [
                     'title' => $t->title,

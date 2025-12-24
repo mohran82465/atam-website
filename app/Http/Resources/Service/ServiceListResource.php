@@ -23,7 +23,8 @@ class ServiceListResource extends JsonResource
             'translations' => $this->translations->mapWithKeys(fn ($t) => [
                 $t->locale => [
                     'title' => $t->title,
-                    'description' => $t->short_description,
+                    'short_description' => $t->short_description,
+                    'long_description'  => $t->long_description,
                     'features' => $t->features,
                 ]
             ]),

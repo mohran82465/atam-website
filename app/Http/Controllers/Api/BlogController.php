@@ -9,10 +9,33 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::with(['translations', 'categories.translations'])->paginate();
-        // return response()->json($blogs->map(fn($b) => $this->formatBlog($b)), 200);
+        $search     = $request->query('search');
+        $categoryId = $request->query('category_id');
+    
+        $blogs = Blog::query()
+            ->where('status', true)
+            ->with([
+                'translations', 
+                'categories.translations'
+            ])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('translations', function ($q) use ($search) {
+                    $q->where(function($inner) use ($search) {
+                        $inner->where('name', 'LIKE', "%{$search}%")
+                              ->orWhere('body', 'LIKE', "%{$search}%");
+                    });
+                });
+            })
+            ->when($categoryId, function ($query) use ($categoryId) {
+                $query->whereHas('categories', function ($q) use ($categoryId) {
+                    $q->where('blog_categories.id', $categoryId);
+                });
+            })
+            ->latest() 
+            ->paginate(10);
+    
         return BlogResource::collection($blogs); 
     }
 

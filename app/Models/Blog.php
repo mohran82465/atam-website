@@ -17,7 +17,7 @@ class Blog extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'blog_category');
+        return $this->belongsToMany(BlogCategory::class, 'category_blog');
     }
 
     public function translation($locale)

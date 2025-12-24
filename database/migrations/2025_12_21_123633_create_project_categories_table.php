@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_translations', function (Blueprint $table) {
+        Schema::create('project_categories', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('blog_category_id')->constrained()->cascadeOnDelete();
-
-            // $table->string('locale');
-            // $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('name'); 
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_translations');
+        Schema::dropIfExists('project_categories');
     }
 };

@@ -2,30 +2,26 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BlogResource\Pages;
-use App\Filament\Resources\BlogResource\RelationManagers;
-use App\Models\Blog;
+use App\Filament\Resources\CreativeDepartmentsResource\Pages;
+use App\Filament\Resources\CreativeDepartmentsResource\RelationManagers;
+use App\Models\CreativeDepartments;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\File;
 
-class BlogResource extends Resource
+class CreativeDepartmentsResource extends Resource
 {
-    protected static ?string $model = Blog::class;
+    protected static ?string $model = CreativeDepartments::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -33,16 +29,17 @@ class BlogResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('name')
+                    ->required(),
                 TextInput::make('slug')
-                    ->required()
                     ->unique(ignoreRecord: true)
+                    ->required()
                     ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
-                    ->rule('lowercase'),
-
+                    ->rule('lowercase')
+                ,
                 FileUpload::make('image')
-                    ->directory('projects')
+                    ->directory('image')
                     ->image()
-                    ->nullable()
                     ->saveUploadedFileUsing(function ($file) {
                         $path = public_path('image');
 
@@ -57,14 +54,6 @@ class BlogResource extends Resource
 
                         return 'image/' . $filename;
                     }),
-                Select::make('categories')
-                    ->multiple()
-                    ->relationship('categories', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->label('Categories'),
-
-
                 Repeater::make('translations')
                     ->relationship()
                     ->schema([
@@ -74,26 +63,24 @@ class BlogResource extends Resource
                                 'ar' => 'Arabic'
                             ])
                             ->required(),
+
                         TextInput::make('name')->required(),
-                        Textarea::make('body')->required(),
-                    ])
-                    ->default([
-                        [
-                            'locale' => 'en',
-                            'name' => '',
-                            'body' => '',
-                        ],
-                        [
-                            'locale' => 'ar',
-                            'name' => '',
-                            'body' => '',
-                        ]
-                    ])
+                        TextInput::make('description')->required()
+                    ])->default([
+                            [
+                                'local' => 'en',
+                                'name' => '',
+                                'description' => ''
+                            ],
+                            [
+                                'local' => 'ar',
+                                'name' => '',
+                                'description' => ''
+                            ],
+                        ])
                     ->itemLabel(function ($state) {
-                        return ($state['locale'] == "ar" ? 'Arabic' : 'English') . ' Blog';
+                        return ($state['locale'] == "ar" ? 'Arabic' : 'English') . ' Our Creative Department';
                     })
-                    ->collapsible()
-                    ->columnSpanFull(),
             ]);
     }
 
@@ -101,27 +88,9 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
-                TextColumn::make('slug')->searchable(),
-                TextColumn::make('translations.name')
-                    ->label('name')
-                    ->formatStateUsing(function ($state, $record) {
-                        $en = $record->translations->firstWhere('locale', 'en');
-                        $ar = $record->translations->firstWhere('locale', 'ar');
-                        return $en->name ?? $ar->name ?? 'N/A';
-                    })->searchable(),
-                TextColumn::make('translations.body')
-                    ->label('body')
-                    ->formatStateUsing(function ($state, $record) {
-                        $en = $record->translations->firstWhere('locale', 'en');
-                        $ar = $record->translations->firstWhere('locale', 'ar');
-                        return $en->name ?? $ar->name ?? 'N/A';
-                    })->searchable(),
-                    ToggleColumn::make('status')
-                    ->label('Published')
-                    ->onColor('success')
-                    ->offColor('danger'),
-                ImageColumn::make(name: 'image')
+                TextInput::make('name'),
+                TextInput::make( 'slug'),
+                ImageColumn::make('image')
                     ->square()
                     ->state(
                         fn($record) =>
@@ -129,6 +98,7 @@ class BlogResource extends Resource
                         ? asset($record->image)
                         : null
                     )
+                ,
             ])
             ->filters([
                 //
@@ -146,17 +116,16 @@ class BlogResource extends Resource
     public static function getRelations(): array
     {
         return [
-
-
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBlogs::route('/'),
-            'create' => Pages\CreateBlog::route('/create'),
-            'edit' => Pages\EditBlog::route('/{record}/edit'),
+            'index' => Pages\ListCreativeDepartments::route('/'),
+            'create' => Pages\CreateCreativeDepartments::route('/create'),
+            'edit' => Pages\EditCreativeDepartments::route('/{record}/edit'),
         ];
     }
 }
