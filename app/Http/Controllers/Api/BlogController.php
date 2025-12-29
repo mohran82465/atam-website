@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    /**
+     * get all the blogs 
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function index(Request $request)
     {
         $search     = $request->query('search');
@@ -39,13 +44,17 @@ class BlogController extends Controller
         return BlogResource::collection($blogs); 
     }
 
+    /**
+     * get the blog by slug
+     * @param mixed $slug
+     * @return BlogResource
+     */
     public function show($slug)
     {
         $blog = Blog::with(['translations', 'categories.translations'])
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // return response()->json($this->formatBlog($blog), 200);
         return new BlogResource($blog   ); 
     }
 

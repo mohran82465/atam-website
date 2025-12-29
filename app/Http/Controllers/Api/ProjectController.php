@@ -39,7 +39,11 @@ class ProjectController extends Controller
     //     $projects = Project::with('translations')->paginate();
     //     return ProjectResource::collection($projects); 
     // }
-
+ /**
+  * get all projects
+  * @param Request $request
+  * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+  */
  public function index(Request $request)
 {
     $search     = $request->query('search');      // text search
@@ -70,32 +74,19 @@ class ProjectController extends Controller
     return ProjectResource::collection($projects);
 }
 
-
+    /**
+     * get project by slug
+     * @param Request $request
+     * @param mixed $slug
+     * @return ProjectResource
+     */
     public function show(Request $request, $slug)
     {
         $project = Project::with('translations')
             ->where('slug', $slug)
             ->firstOrFail();
 
-        // $translations = $project->translations->mapWithKeys(function ($t) {
-        //     return [
-        //         $t->locale => [
-        //             'name' => $t->name,
-        //             'body' => $t->body,
-        //             'problem' => $t->problem,
-        //             'solve' => $t->solve,
-        //             'tech' => $t->tech,
-        //         ]
-        //     ];
-        // });
-
-        // return response()->json([
-        //     'id' => $project->id,
-        //     'slug' => $project->slug,
-        //     'image' => $project->image ? asset('storage/' . $project->image) : null,
-        //     'translations' => $translations,
-        // ], 200);
-        return new ProjectResource($project); 
+                return new ProjectResource($project); 
     }
 
 }

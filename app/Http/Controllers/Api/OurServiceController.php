@@ -34,35 +34,25 @@ class OurServiceController extends Controller
           ];
            });
     }
-    
+    /**
+     * get all service 
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function index(){
         $services = Service::with('translations')->get(); 
-        // $data = $services->map(function($service){
-        //     return [
-        //         'id'=> $service->id,
-        //         'name'=> $service->name,
-        //         'slug'=> $service->slug,
-        //         'icon'=> $service->icon,
-        //         'translations'=> $this->formatTranslationsForAllServices($service->translations),
-        //     ];
-        // });
-
-        // return response()->json($data, 200);
         return ServiceListResource::collection($services); 
     }
+    /**
+     * get service by slug
+     * @param mixed $slug
+     * @return ServiceShowResource
+     */
     public function show($slug)
     {
         $service = Service::with('translations')
             ->where('slug', $slug)
             ->firstOrFail();
     
-        // return response()->json([
-        //     'id' => $service->id,
-        //     'name' => $service->name,
-        //     'slug' => $service->slug,
-        //     'icon' => $service->icon,
-        //     'translations' => $this->formatTranslationsForService($service->translations),
-        // ], 200);
         return new ServiceShowResource($service); 
     }
     

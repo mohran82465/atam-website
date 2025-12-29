@@ -53,11 +53,20 @@ class CategoryController extends Controller
     // }
     
     // }
+    
+    /**
+     * get all categories for blogs  
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function indexBlog(){
         $categories = BlogCategory::with('translations')->get(); 
         return CategoryResource::collection($categories); 
     }
-
+    
+    /**
+     * get all categories for projects
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function indexProject(){
         $categories = ProjectCategory::with('translations')->get(); 
         return CategoryResource::collection($categories); 

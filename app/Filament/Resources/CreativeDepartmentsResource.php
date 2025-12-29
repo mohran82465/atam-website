@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -88,8 +89,8 @@ class CreativeDepartmentsResource extends Resource
     {
         return $table
             ->columns([
-                TextInput::make('name'),
-                TextInput::make( 'slug'),
+                TextColumn::make('name'),
+                TextColumn::make( 'slug'),
                 ImageColumn::make('image')
                     ->square()
                     ->state(
