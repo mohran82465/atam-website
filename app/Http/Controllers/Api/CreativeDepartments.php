@@ -10,7 +10,7 @@ class CreativeDepartments extends Controller
 {
     //
     public function index(){
-        $creativeDepartments = CreativeDepartments::with('translations')->get(); 
+        $creativeDepartments = \App\Models\CreativeDepartments::with('translations')->get(); 
         return CreativeDepartmentsResource::collection($creativeDepartments); 
     }
 }

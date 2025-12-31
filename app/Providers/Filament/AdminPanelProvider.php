@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\GeneralDashboardResource\Widgets\BlogStats;
 use App\Filament\Resources\GeneralDashboardResource\Widgets\ProjectStats;
+use App\Filament\Resources\GeneralDashboardResource\Widgets\UnreadContacts;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -42,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 BlogStats::class,
                 ProjectStats::class,
+                UnreadContacts::class
             ])
             ->middleware([
                 EncryptCookies::class,

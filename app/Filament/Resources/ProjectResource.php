@@ -39,6 +39,9 @@ class ProjectResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->regex('/^[a-z0-9\-]+$/')   // <- only lowercase, numbers, dashes
                     ->rule('lowercase'),
+                TextInput::make('url')
+                    ->nullable()                    
+                ,
                 Select::make('categories')
                     ->multiple()
                     ->relationship('categories', 'name')

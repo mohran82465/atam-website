@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ChunkController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\CreativeDepartments;
 use App\Http\Controllers\Api\OurServiceController;
 use App\Http\Controllers\Api\ProjectController;
@@ -43,3 +44,4 @@ Route::get('/creative-department', [CreativeDepartments::class, 'index']);
 Route::get('/blog-category',[CategoryController::class,'indexBlog']); 
 Route::get('/project-category',[CategoryController::class,'indexProject']); 
 
+Route::post('/contact-us', [ContactController::class, 'store']);

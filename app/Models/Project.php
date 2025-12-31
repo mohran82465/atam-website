@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     use HasFactory;
-    protected $fillable = ['slug', 'image'];
+    protected $fillable = ['slug', 'image','url','status'];
 
     public function translations()
     {

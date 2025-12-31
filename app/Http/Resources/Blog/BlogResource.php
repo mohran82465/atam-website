@@ -26,6 +26,7 @@ class BlogResource extends JsonResource
                 ]
             ]),
             'categories' => CategoryResource::collection($this->categories),
+            'created_at' => $this->created_at,
         ];
     }
 }
