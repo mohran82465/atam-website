@@ -41,6 +41,16 @@ class CreativeDepartmentsResource extends Resource
                 FileUpload::make('image')
                     ->directory('image')
                     ->image()
+                    ->nullable()
+                    ->fetchFileInformation(false)
+                    ->getUploadedFileUsing(function ($component, string $file, $storedFileNames): ?array {
+                        return [
+                            'name' => basename($file),
+                            'size' => 0,
+                            'type' => null,
+                            'url' => asset($file),
+                        ];
+                    })
                     ->saveUploadedFileUsing(function ($file) {
                         $path = public_path('image');
 

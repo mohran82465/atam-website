@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    
     public function store(StoreContactMessageRequest $request): JsonResponse
     {
         ContactMessage::create($request->validated());

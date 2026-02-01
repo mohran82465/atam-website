@@ -29,7 +29,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('Atam Digital Solutions')
             ->login()
+            ->passwordReset(
+                \App\Filament\Pages\Auth\PasswordReset\RequestPasswordReset::class,
+                \App\Filament\Pages\Auth\PasswordReset\ResetPassword::class
+            )
             ->colors([
                 'primary' => Color::Amber,
             ])

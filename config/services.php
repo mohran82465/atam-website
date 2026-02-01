@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'mailtrap' => [
+        'api_token' => env('MAILTRAP_API_TOKEN'),
+        // Use a verified sender domain from Mailtrap Email Sending dashboard
+        'from_email' => env('MAILTRAP_FROM_EMAIL'),
+    ],
+
 ];

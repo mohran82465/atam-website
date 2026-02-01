@@ -24,7 +24,7 @@ class StoreContactMessageRequest extends FormRequest
         return [
             'fullname' => 'required|string|max:255',
             'email' => 'required|email',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'required|string|max:20',
             'message' =>'string'
         ];
     }

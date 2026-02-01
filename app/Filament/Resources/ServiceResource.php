@@ -45,18 +45,28 @@ class ServiceResource extends Resource
                 FileUpload::make('image')
                     ->directory('image')
                     ->image()
+                    ->nullable()
+                    ->fetchFileInformation(false)
+                    ->getUploadedFileUsing(function ($component, string $file, $storedFileNames): ?array {
+                        return [
+                            'name' => basename($file),
+                            'size' => 0,
+                            'type' => null,
+                            'url' => asset($file),
+                        ];
+                    })
                     ->saveUploadedFileUsing(function ($file) {
                         $path = public_path('image');
 
-                        if (! File::exists($path)) {
+                        if (!File::exists($path)) {
                             File::makeDirectory($path, 0755, true);
                         }
-                
+
                         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                         $target = $path . DIRECTORY_SEPARATOR . $filename;
-                
+
                         File::copy($file->getRealPath(), $target);
-                
+
                         return 'image/' . $filename;
                     })
                 ,
